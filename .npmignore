@@ -1,0 +1,6 @@
+src/
+.idea/
+.prettierrc
+babel.config.js
+tsconfig.json
+webpack.config.js
