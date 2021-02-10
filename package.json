@@ -8,7 +8,7 @@
     "start": "webpack build --watch",
     "build:dev": "webpack build",
     "build:prod": "webpack build --mode=production",
-    "prepare": "yarn build:prod && yarn types",
+    "prepack": "yarn build:prod && yarn types",
     "types": "tsc --emitDeclarationOnly",
     "types:dev": "tsc --emitDeclarationOnly --watch"
   },

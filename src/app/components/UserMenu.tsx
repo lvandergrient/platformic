@@ -3,6 +3,7 @@ import styled from "styled-components";
 import El from "ui-box-plus";
 import { Dropdown, Menu, Divider, Typography } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
+import { useHistory } from "react-router-dom";
 
 import useAuth from "../hooks/useAuth";
 
@@ -14,8 +15,9 @@ const UserMenuStyles = styled(El)`
 
 export default function UserMenu() {
   const { user } = useAuth();
+  const history = useHistory();
 
-  return (
+  return user ? (
     <Dropdown
       trigger={["click"]}
       placement="bottomRight"
@@ -23,18 +25,36 @@ export default function UserMenu() {
         <Menu>
           <El pl pr pt>
             <Typography.Text strong mark>
-              {user.name}
+              {user.attributes.name}
             </Typography.Text>
-            <Typography.Text type="secondary">{user.email}</Typography.Text>
+            <Typography.Text type="secondary">
+              {user.attributes.email}
+            </Typography.Text>
           </El>
           <Divider />
-          <Menu.Item icon={<LogoutOutlined />}>Log out</Menu.Item>
+          <Menu.Item
+            onClick={async () => {
+              try {
+                await user?.signOut();
+                history.push("/login");
+              } catch (e) {}
+            }}
+            icon={<LogoutOutlined />}
+          >
+            Log out
+          </Menu.Item>
         </Menu>
       }
     >
       <UserMenuStyles>
-        <El is="img" src={user.picture} h={4} w={4} borderRadius="100%" />
+        <El
+          is="img"
+          src={`https://robohash.org/${user.attributes.name}.png?set=set4`}
+          h={4}
+          w={4}
+          borderRadius="100%"
+        />
       </UserMenuStyles>
     </Dropdown>
-  );
+  ) : null;
 }

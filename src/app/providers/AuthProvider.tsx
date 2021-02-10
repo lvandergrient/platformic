@@ -5,10 +5,10 @@ export const Context = React.createContext<any>(null);
 
 export default function AuthProvider({ children }: any) {
   const [authState, setAuthState] = React.useState<AuthState>();
-  const [user, setUser] = React.useState<object | undefined>();
+  const [user, setUser] = React.useState<Record<string, any> | undefined>();
 
   React.useEffect(() => {
-    onAuthUIStateChange((nextAuthState, authData) => {
+    onAuthUIStateChange(async (nextAuthState, authData) => {
       setAuthState(nextAuthState);
       setUser(authData);
     });
