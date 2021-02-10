@@ -7,25 +7,40 @@ import "antd/dist/antd.min.css";
 
 import Main from "./Main";
 import PlatformicProvider from "./providers/PlatformicProvider";
+import AuthProvider from "./providers/AuthProvider";
 import GlobalStyles from "./GlobalStyles";
 
 interface Props {
-  cognitoClientPoolId: string;
+  cognitoUserPoolId: string;
+  cognitoRegion: string;
+  cognitoAppClientId: string;
 }
 
-export default function Platformic({ cognitoClientPoolId }: Props) {
+export default function Platformic({
+  cognitoUserPoolId,
+  cognitoRegion,
+  cognitoAppClientId,
+}: Props) {
   React.useLayoutEffect(() => {
-    Amplify.configure({});
-  }, [cognitoClientPoolId]);
+    Amplify.configure({
+      Auth: {
+        region: cognitoRegion,
+        userPoolId: cognitoUserPoolId,
+        userPoolWebClientId: cognitoAppClientId,
+      },
+    });
+  }, [cognitoUserPoolId]);
 
   return (
     <PlatformicProvider>
-      <ThemeProvider theme={{ gridSize: 12 }}>
-        <Router>
-          <GlobalStyles />
-          <Main />
-        </Router>
-      </ThemeProvider>
+      <AuthProvider>
+        <ThemeProvider theme={{ gridSize: 12 }}>
+          <Router>
+            <GlobalStyles />
+            <Main />
+          </Router>
+        </ThemeProvider>
+      </AuthProvider>
     </PlatformicProvider>
   );
 }
