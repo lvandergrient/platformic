@@ -9,38 +9,28 @@ import Main from "./Main";
 import PlatformicProvider from "./providers/PlatformicProvider";
 import AuthProvider from "./providers/AuthProvider";
 import GlobalStyles from "./GlobalStyles";
+import { RoutesConfig } from "./types";
 
 interface Props {
-  cognitoUserPoolId: string;
-  cognitoRegion: string;
-  cognitoAppClientId: string;
+  awsExports: any;
+  routes?: RoutesConfig;
 }
 
-export default function Platformic({
-  cognitoUserPoolId,
-  cognitoRegion,
-  cognitoAppClientId,
-}: Props) {
+export default function Platformic({ awsExports, routes = {} }: Props) {
   React.useLayoutEffect(() => {
-    Amplify.configure({
-      Auth: {
-        region: cognitoRegion,
-        userPoolId: cognitoUserPoolId,
-        userPoolWebClientId: cognitoAppClientId,
-      },
-    });
-  }, [cognitoUserPoolId]);
+    Amplify.configure(awsExports);
+  }, [awsExports]);
 
   return (
-    <PlatformicProvider>
-      <AuthProvider>
-        <ThemeProvider theme={{ gridSize: 12 }}>
-          <Router>
+    <PlatformicProvider routes={routes}>
+      <ThemeProvider theme={{ gridSize: 12 }}>
+        <Router>
+          <AuthProvider>
             <GlobalStyles />
             <Main />
-          </Router>
-        </ThemeProvider>
-      </AuthProvider>
+          </AuthProvider>
+        </Router>
+      </ThemeProvider>
     </PlatformicProvider>
   );
 }

@@ -1,20 +1,22 @@
 import * as React from "react";
 import El from "ui-box-plus";
-import { Route, Switch, Redirect } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { AuthState } from "@aws-amplify/ui-components";
 
 import Header from "./components/Header";
 import MainMenu from "./components/MainMenu";
 import LoginScreen from "./screens/Login";
+import NotFoundScreen from "./screens/404";
 import useAuth from "./hooks/useAuth";
+import usePlatformic from "./hooks/usePlatformic";
 
 export default function Main() {
-  const { authState } = useAuth();
+  const { authState, user } = useAuth();
+  const { routes } = usePlatformic();
 
   return (
     <Switch>
-      <Route path="/login" component={LoginScreen} />
-      {authState === AuthState.SignedIn && (
+      {authState === AuthState.SignedIn && user ? (
         <Route
           path=""
           render={() => (
@@ -24,15 +26,23 @@ export default function Main() {
                 <MainMenu />
                 <El fx="1">
                   <Switch>
-                    <Route path="" render={() => <div>Logged in</div>} />
+                    {Object.keys(routes).map((path) => (
+                      <Route
+                        key={path}
+                        path={path}
+                        component={routes[path].component}
+                      />
+                    ))}
+                    <Route path="" component={NotFoundScreen} />
                   </Switch>
                 </El>
               </El>
             </El>
           )}
         />
+      ) : (
+        <Route path="/login" component={LoginScreen} />
       )}
-      <Redirect to="/login" />
     </Switch>
   );
 }

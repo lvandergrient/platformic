@@ -11,7 +11,7 @@ export default createGlobalStyle`
     --lightgray: #F5F7F9;
     --mediumgray: #74818D;
 
-    --font-family-sans: "Open Sans", sans-serif;
+    --font-family-sans: "Public Sans", sans-serif;
     
     // Amplify variables
     --amplify-primary-color: var(--primary);
