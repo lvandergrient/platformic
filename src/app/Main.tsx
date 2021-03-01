@@ -1,6 +1,6 @@
 import * as React from "react";
 import El from "ui-box-plus";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { AuthState } from "@aws-amplify/ui-components";
 
 import Header from "./components/Header";
@@ -30,7 +30,14 @@ export default function Main() {
                       <Route
                         key={path}
                         path={path}
-                        component={routes[path].component}
+                        exact
+                        render={(props) =>
+                          routes[path].redirect ? (
+                            <Redirect to={routes[path].redirect!} />
+                          ) : (
+                            React.createElement(routes[path].component, props)
+                          )
+                        }
                       />
                     ))}
                     <Route path="" component={NotFoundScreen} />

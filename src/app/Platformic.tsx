@@ -9,20 +9,25 @@ import Main from "./Main";
 import PlatformicProvider from "./providers/PlatformicProvider";
 import AuthProvider from "./providers/AuthProvider";
 import GlobalStyles from "./GlobalStyles";
-import { RoutesConfig } from "./types";
+import { MenuItem, RoutesConfig } from "./types";
 
 interface Props {
   awsExports: any;
   routes?: RoutesConfig;
+  menuItems?: MenuItem[];
 }
 
-export default function Platformic({ awsExports, routes = {} }: Props) {
+export default function Platformic({
+  awsExports,
+  routes = {},
+  menuItems = [],
+}: Props) {
   React.useLayoutEffect(() => {
     Amplify.configure(awsExports);
   }, [awsExports]);
 
   return (
-    <PlatformicProvider routes={routes}>
+    <PlatformicProvider routes={routes} menuItems={menuItems}>
       <ThemeProvider theme={{ gridSize: 12 }}>
         <Router>
           <AuthProvider>
